@@ -1,0 +1,8 @@
+Put your gallery images in this folder.
+
+Then run:
+  python tools/build_gallery_manifest.py
+
+After that, open:
+  site/gallery/index.html
+

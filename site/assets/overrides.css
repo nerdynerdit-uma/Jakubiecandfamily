@@ -1,0 +1,38 @@
+/* Overrides to show images in natural color (remove overlays/filters). */
+
+/* Kill any grayscale utility filters on images/sections */
+.grayscale,
+img.grayscale,
+[class*="grayscale"] {
+  --tw-grayscale: grayscale(0) !important;
+  filter: none !important;
+}
+
+/* Remove hero gradient overlay utilities (commonly used on the hero image container). */
+.bg-gradient-to-r.from-secondary\/90.via-secondary\/60.to-transparent,
+.bg-gradient-to-r.from-secondary\/80.via-secondary\/60.to-transparent,
+.bg-gradient-to-r.from-secondary\/70.via-secondary\/60.to-transparent,
+.bg-gradient-to-r.from-secondary\/90.to-transparent,
+.bg-gradient-to-r.from-secondary\/80.to-transparent,
+.bg-gradient-to-r.from-secondary\/70.to-transparent {
+  background-image: none !important;
+}
+
+/* If an absolutely-positioned overlay layer is used, make it transparent. */
+.absolute.inset-0.bg-gradient-to-r,
+.absolute.inset-0[class*="bg-gradient-to-"],
+.absolute.inset-0[class*="from-secondary"],
+.absolute.inset-0[class*="via-secondary"] {
+  background-image: none !important;
+  background-color: transparent !important;
+  opacity: 1 !important;
+}
+
+/* Ensure images aren’t dimmed by utility opacity classes. */
+img.opacity-60,
+img.opacity-70,
+img.opacity-80,
+img.opacity-90 {
+  opacity: 1 !important;
+}
+

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery | Jakubiec and Family Skidsteer Works</title>
+    <style>
+      :root {
+        --bg: #0f0f0f;
+        --card: #151515;
+        --text: #f2f2f2;
+        --muted: #bdbdbd;
+        --border: #2a2a2a;
+        --accent: #ffcc00;
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      header {
+        padding: 24px 16px;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(180deg, rgba(255, 204, 0, 0.08), rgba(255, 204, 0, 0));
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0 0 6px 0;
+        letter-spacing: 0.02em;
+      }
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+      main {
+        padding: 24px 16px 48px;
+      }
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0 16px 0;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 999px;
+        padding: 10px 12px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .pill strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 12px;
+      }
+      @media (min-width: 600px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (min-width: 960px) {
+        .grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+      }
+      .card img {
+        width: 100%;
+        height: 260px;
+        object-fit: cover;
+        display: block;
+      }
+      .card .cap {
+        padding: 10px 12px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 13px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .empty {
+        padding: 18px;
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      a {
+        color: var(--accent);
+      }
+      code {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <h1>Gallery</h1>
+        <p>
+          Drop images into <code>site/gallery/images</code>, run
+          <code>python tools/build_gallery_manifest.py</code>, then refresh.
+        </p>
+      </div>
+    </header>
+    <main>
+      <div class="wrap">
+        <div class="toolbar">
+          <div class="pill">
+            Images found: <strong id="count">0</strong>
+          </div>
+          <div class="pill">
+            Manifest: <code>gallery/manifest.json</code>
+          </div>
+        </div>
+
+        <div id="empty" class="empty" hidden>
+          No images listed yet. Add files to <code>site/gallery/images</code> and
+          regenerate the manifest.
+        </div>
+
+        <div id="grid" class="grid" aria-live="polite"></div>
+      </div>
+    </main>
+
+    <script>
+      async function load() {
+        const res = await fetch("./manifest.json", { cache: "no-store" });
+        const manifest = await res.json();
+        const images = Array.isArray(manifest.images) ? manifest.images : [];
+
+        document.getElementById("count").textContent = String(images.length);
+
+        const grid = document.getElementById("grid");
+        grid.innerHTML = "";
+
+        const empty = document.getElementById("empty");
+        empty.hidden = images.length !== 0;
+
+        for (const src of images) {
+          const card = document.createElement("div");
+          card.className = "card";
+
+          const img = document.createElement("img");
+          img.loading = "lazy";
+          img.src = src;
+          img.alt = src.replace(/^images\\//, "");
+
+          const cap = document.createElement("div");
+          cap.className = "cap";
+          cap.textContent = img.alt;
+
+          card.appendChild(img);
+          card.appendChild(cap);
+          grid.appendChild(card);
+        }
+      }
+
+      load().catch((e) => {
+        console.error(e);
+        alert(
+          "Failed to load gallery manifest. Make sure you're serving the 'site' folder with a local web server (not opening the HTML file directly)."
+        );
+      });
+    </script>
+  </body>
+</html>
+
