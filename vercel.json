@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "trailingSlash": true,
+  "builds": [
+    { "src": "site/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "^/assets/(.*)$", "dest": "/site/assets/$1" },
+    { "src": "^/~flock\\.js$", "dest": "/site/~flock.js" },
+    { "src": "^/(about|services|contact|faq|privacy|terms|gallery)(/.*)?$", "dest": "/site/$1$2" },
+    { "src": "^/$", "dest": "/site/index.html" },
+    { "src": "^/(.*)$", "dest": "/site/$1" }
+  ]
+}
+
